@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fiche chambre -
+	{{ parent() }}
+{% endblock %}
+
+{% block body %}
+
+	<div class="w3-container w3-content w3-center w3-padding-64" style="max-width:800px" id="produitmobilier">
+		<div class="w3-container w3-content w3-padding-64" style="max-width:800px">
+			<h2 class="w3-wide w3-center">FICHE CHAMBRE</h2>
+			<p class="w3-opacity w3-center">
+				<i>Logements Disponible
+				</i>
+			</p><br>
+
+			<table class="w3-table-all" style="margine-top:50px">
+				<tr>
+					<th>
+						<a href="{{ path('chambre_delete', {'chambreId' : chambre.id}) }} " class="w3-button w3-red" type="button">SUPPRIMER</a>
+					</th>
+					<th>
+						<a href="{{ path('chambre_update', {'chambreId' : chambre.id}) }}" class="w3-button w3-blue-gray" type="button">MODIFIER</a>
+					</th>
+					<th>
+						<a href="{{ path('chambre_display', {'chambreId' : chambre.id}) }}" class="w3-button w3-blue" type="button">AFFICHER</a>
+					</th>
+				</tr>
+			</table>
+			<div class="w3-row-padding w3-padding-32" style="margin:0 -16px">
+				<div class="w3-third w3-margin-bottom" style="width:65%">
+					<img src="{{ asset("assets/img/salon4.jpg")}} " class="w3-round w3-hover-opacity" style="width: 450px" alt="chambre">
+				</div>
+				<div class="w3-third w3-margin-bottom" style="width:33%">
+					<div class="w3-container w3-white">
+						<p>
+							<b></b>
+						</p>
+						<h3>{{ chambre.name }}</h3>
+						<p>{{ chambre.description }}</p>
+						<p class="w3-opacity">Prix:
+							{{ chambre.price|number_format(2, ',') }}€</p>
+						<button class="w3-button w3-black">RESERVER</button>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+{% endblock %}

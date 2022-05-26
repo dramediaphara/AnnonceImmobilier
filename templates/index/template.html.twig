@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} ANNONCE IMMOBILIER !{% endblock %}
+
+{% block body %}
+  
+  <div class="w3-row-padding">
+    <div class="w3-col m3">
+      <label><i class="fa fa-calendar-o"></i> Entregistrer</label>
+      <input class="w3-input w3-border" type="text" placeholder="DD MM YYYY">
+    </div>
+    <div class="w3-col m3">
+      <label><i class="fa fa-calendar-o"></i> Verifier</label>
+      <input class="w3-input w3-border" type="text" placeholder="DD MM YYYY">
+    </div>
+    <div class="w3-col m2">
+      <label><i class="fa fa-male"></i> Adultes</label>
+      <input class="w3-input w3-border" type="number" placeholder="1">
+    </div>
+    <div class="w3-col m2">
+      <label><i class="fa fa-child"></i> Enfants</label>
+      <input class="w3-input w3-border" type="number" placeholder="0">
+    </div>
+    <div class="w3-col m2">
+      <label><i class="fa fa-search"></i> Chercher</label>
+      <button class="w3-button w3-block w3-black">Chercher</button>
+    </div>
+  </div>
+  <!-- Page content -->
+<div class="w3-content" style="max-width:1532px;">
+
+  <div class="w3-row-padding w3-padding-16">
+    <div class="w3-third w3-margin-bottom">
+      <img src="{{ asset('assets/img/salonetage1.jpg') }}" alt="salonetage1" style="width:100%">
+      <div class="w3-container w3-white">
+        <h3>Chambre Meublée</h3>
+        <h6 class="w3-opacity">A Partier de 25€/jour</h6>
+        <p>Lit Simple</p>
+        <p>15m<sup>2</sup></p>
+        <p class="w3-large"><i class="fa fa-bath"></i> <i class="fa fa-phone"></i> <i class="fa fa-wifi"></i></p>
+        <a href="{{ path('app_index') }}"  class="w3-button w3-block w3-black w3-margin-bottom">NOS LOCATIONS</a>
+      </div>
+    </div>
+    <div class="w3-third w3-margin-bottom">
+      <img src="{{ asset('assets/img/salon4.jpg') }}" alt="salonet4" style="width:100%">
+      <div class="w3-container w3-white">
+        <h3>Appartement Meublée</h3>
+        <h6 class="w3-opacity">A Partier de 55€/jour</h6>
+        <p>Double de Lit</p>
+        <P>65m<sup>2</sup></P>
+        <p class="w3-large"><i class="fa fa-bath"></i> <i class="fa fa-phone"></i> <i class="fa fa-wifi"></i> <i class="fa fa-tv"></i></p>
+       <a href="{{ path('app_index') }}"  class="w3-button w3-block w3-black w3-margin-bottom">NOS LOCATIONS</a>
+      </div>
+    </div>
+    <div class="w3-third w3-margin-bottom">
+      <img src="{{ asset('assets/img/salon5.jpg') }}" alt="salon5" style="width:100%">
+      <div class="w3-container w3-white">
+        <h3>Maison Meublée</h3>
+        <h6 class="w3-opacity">A Partier de 150€/jour</h6>
+        <p>Double Lit</p>
+        <p>80m<sup>2</sup></p>
+        <p class="w3-large"><i class="fa fa-bath"></i> <i class="fa fa-phone"></i> <i class="fa fa-wifi"></i> <i class="fa fa-tv"></i></p>
+         <a href="{{ path('app_index') }}" class="w3-button w3-block w3-black w3-margin-bottom" >NOS LOCATIONS</a>
+      </div>
+    </div>
+  </div>
+
+<!-- End page content -->
+</div>
+{% endblock %}

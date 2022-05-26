@@ -1,19 +1,65 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
+	<head>
+		<meta charset="UTF-8">
+		<title>
+			{% block title %}
+				DIA Immobilier
+			{% endblock %}
+		</title>
+		{% block stylesheets %}
+			<link rel="stylesheet" href="  {{ asset('assets/css/w3.css') }}">
+			<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+			<style>
+				body,
+				h1,
+				h2,
+				h3,
+				h4,
+				h5,
+				h6 {
+					font-family: "Raleway", Arial, Helvetica, sans-serif
+				}
+			</style>
+		{% endblock %}
+	</head>
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+	<body class="w3-light-grey">
+
+		{% include 'layout/header.html.twig' %}
+
+		<!-- page content -->
+		<div class="w3-content" style="max-width:2000px;margin-top:46px"> {% block body %}{% endblock %}
+			{% include 'layout/contact.html.twig' %}
+			<!-- End page content -->
+		</div>
+
+		{% include 'layout/footer.html.twig' %}
+
+		<!-- Add Google Maps -->
+		{% block javascripts %}
+			<script>
+				function myMap() {
+myCenter = new google.maps.LatLng(41.878114, -87.629798);
+var mapOptions = {
+center: myCenter,
+zoom: 12,
+scrollwheel: false,
+draggable: false,
+mapTypeId: google.maps.MapTypeId.ROADMAP
+};
+var map = new google.maps.Map(document.getElementById("googleMap"), mapOptions);
+
+var marker = new google.maps.Marker({position: myCenter});
+marker.setMap(map);
+}
+			</script>
+			<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBu-916DdpKAjTmJNIgngS6HL_kDIKU0aU&callback=myMap"></script>
+			<!--
+									To use this code on your website, get a free API key from Google.
+									Read more at: https://www.w3schools.com/graphics/google_maps_basic.asp
+									-->
+		{% endblock %}
+	</body>
 </html>

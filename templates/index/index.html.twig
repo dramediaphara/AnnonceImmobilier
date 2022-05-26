@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ANNONCE IMMOBILIERE{% endblock %}
+
+{% block body %}
+       <!-- The Band Section -->
+        <div class="w3-container w3-content w3-center w3-padding-64" style="max-width:95%" id="band">
+            {# <h2 class="w3-wide">{{ selectedcategory.name }} </h2>   #}
+            {# <p class="w3-justify">{{ selectedcategory.description }} </p>    #}
+            <div class="w3-row w3-padding-32">
+            <h1>ANNONCE IMMOBILIERE</h1>
+              {% for chambre in chambres %}
+                <div class="w3-third">
+                    <p style="font-size:25px">{{ chambre.name }}</p>
+                    <a href="{{ path('chambre_display', {'chambreId' : chambre.id}) }}">
+                      <img src="{{ asset("assets/img/salon5.jpg")}}" class="w3-round w3-hover-opacity" style="width: 400px;" alt="chambre">
+                    </a>
+                </div>
+              {% endfor %}
+            </div>
+        </div>
+{% endblock %}
