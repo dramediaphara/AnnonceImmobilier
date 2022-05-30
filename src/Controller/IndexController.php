@@ -19,39 +19,46 @@ class IndexController extends AbstractController
         //On fait appel à l'Entity Manager et au Repository de chambre pour récupérer la liste de tous nos chambres
         $entityManager = $doctrine->getManager();
         $chambreRepository = $entityManager->getRepository(Chambre::class);
-
-        //On récupère la liste de nos chambres
-        $chambres = $chambreRepository->findAll(); //On récupère tout
-
-        //On transmet nos chambres à notre Twig
-        return $this->render('index/index.html.twig', [
-            'chambres' => $chambres,
-        ]);
-    }
-
-    #[Route('category/{categoryName}', name: 'index_category')]
-    public function indexCategory(string $categoryName, ManagerRegistry $doctrine): Response
-    {
-        // Cette methode nous rend les chambres dont la categorie correspond à la valeur entree dans notre barre d'adresse en tant que "categoryName"
-
-        // Afin de pouvoir communiquer avec notre base de donnees, nous avons besoin de l'entity Manager ainsi que du Repository de chambre
-        $entityManager = $doctrine->getManager();
-        $chambreRepository = $entityManager->getRepository(Chambre::class);
-        //Liste des Categories
+        //On récupère la liste des Categories
         $categoryRepository = $entityManager->getRepository(Category::class);
         $categories = $categoryRepository->findAll();
-        // Nous verifions si la categorie mentionnee dans notre barre d'adresse existe parmi nos chambres, si non, nous retournons à l'index
-        // Nous recuperons les chambres dont la categorie correspond:
-        $chambres = $chambreRepository->findBy(['category' => $categoryName], ['id' => 'DESC']);
-        if (empty($chambres)) {
-            return $this->redirectToRoute('app_index');
-        }
-        // Nous transmettons, s'il existent, les chambres reçus sur index.html.twig
+        //On récupère la liste de nos chambres
+        $chambres = $chambreRepository->findAll(); //On récupère tout
+        $selectedCategory = ['name'=>'Annonce immobilier', 'description'=>''];
+        //On transmet nos chambres à notre Twig
         return $this->render('index/index.html.twig', [
-            'chambres' => $chambres,
+            'selectedCategory'=> $selectedCategory,
             'categories' => $categories,
+            'chambres' => $chambres,
+
         ]);
     }
+
+    #[Route('/category/{categoryName}', name: 'index_category')]
+    public function indexCategory(string $categoryName, ManagerRegistry $doctrine): Response
+    {
+        //Cette méthode présente tous les Products liés à une Category dont le nom est indiqué dans l'URL
+
+        //Nous récupérons l'Entity Manager ainsi que le Repository pertinent (categoryRepository)
+        $entityManager = $doctrine->getManager();
+        $categoryRepository = $entityManager->getRepository(Category::class);
+        //Liste des Categories
+        $categories = $categoryRepository->findAll();
+        //Nous récupérons la Category dont le nom est indiqué. Si celle-ci n'est pas trouvée, nous retournons à l'index
+        $category = $categoryRepository->findOneBy(['name' => $categoryName]);
+        if (!$category) {
+            return $this->redirectToRoute('app_index');
+        }
+        //On récupère la liste des chambres liés à la Category que nous transmettons à Twig
+        $chambres = $category->getChambres();
+        //Rendu Twig
+        return $this->render('index/index.html.twig', [
+            'selectedCategory' => $category,
+            'categories' => $categories,
+            'chambres' => $chambres,
+        ]);
+    }
+
     #[Route('/chambre/create', name: 'chambre_create')]
     public function createChambre(Request $request, ManagerRegistry $doctrine): Response
     {
@@ -60,7 +67,7 @@ class IndexController extends AbstractController
         //On fait appel à l'Entity Manager et au Repository de chambre pour récupérer la liste de tous nos chambres
         $entityManager = $doctrine->getManager();
         $chambreRepository = $entityManager->getRepository(Chambre::class);
-
+        
         //On creer une nouvelle chambre
         $chambre = new Chambre();
 
@@ -91,7 +98,9 @@ class IndexController extends AbstractController
         // Afin de recuperer la chambre désiré, nous avons besoin de l'Entity Manager et du Repository de la chambre
         $entityManager = $doctrine->getManager();
         $chambreRepository = $entityManager->getRepository(Chambre::class);
-
+        //Liste des Categories
+        $categoryRepository = $entityManager->getRepository(Category::class);
+        $categories = $categoryRepository->findAll();
         $chambre = $chambreRepository->find($chambreId);
         // si la chambre n'existe pas, nous retournons à l'index
         if (!$chambre) {
@@ -112,7 +121,8 @@ class IndexController extends AbstractController
 
         // nous transettons notre formulaire de bulletin à twig
         return $this->render('index/dataForm.html.twig', [
-            'formName' => 'création de la Chambre',
+            'categories' => $categories,
+            'formName' => 'modification de la Chambre',
             'dataForm' => $chambreForm->createView(),
         ]);
     }
@@ -123,7 +133,9 @@ class IndexController extends AbstractController
         // 
         $entityManager = $doctrine->getManager();
         $chambreRepository = $entityManager->getRepository(Chambre::class);
-        // 
+        //Liste des Categories
+        $categoryRepository = $entityManager->getRepository(Category::class);
+        $categories = $categoryRepository->findAll();
         $chambre = $chambreRepository->find($chambreId);
         // 
         if (!$chambre) {
@@ -133,6 +145,7 @@ class IndexController extends AbstractController
         $entityManager->remove($chambre);
         $entityManager->flush();
         return $this->redirectToRoute('app_index', [
+            'categories' => $categories,
             'chambres' => $chambre
         ]);
     }
@@ -145,7 +158,9 @@ class IndexController extends AbstractController
         // Afin de mener une recherche dans notre BDD, nous avons besoin de l'Entity Manager ainsi que du Repoitory de la chambre
         $entityManager = $doctrine->getManager();
         $chambreRepository = $entityManager->getRepository(Chambre::class);
-
+        //Liste des Categories
+        $categoryRepository = $entityManager->getRepository(Category::class);
+        $categories = $categoryRepository->findAll();
         // Nous recherchons la chambre via son ID en utilisant la methode find() du Repository.
         $chambre = $chambreRepository->find($chambreId);
         // si la recherche ne mene à rien, $chambre vaut null, et nous retournons à l'index 
@@ -154,6 +169,7 @@ class IndexController extends AbstractController
         }
         // si nous avons notre Chambre, nous le transmetton à index.html.twig
         return $this->render('index/chambre_display.html.twig', [
+            'categories' => $categories,
             'chambre' => $chambre,
         ]);
     }

@@ -16,20 +16,21 @@
 
 			<table class="w3-table-all" style="margine-top:50px">
 				<tr>
-					<th>
-						<a href="{{ path('chambre_delete', {'chambreId' : chambre.id}) }} " class="w3-button w3-red" type="button">SUPPRIMER</a>
+				    <th>
+						<a href="{{ path('chambre_create', {'chambreId' : chambre.id}) }}" class="w3-button w3-green" type="button">CREER ANNONCE</a>
 					</th>
 					<th>
-						<a href="{{ path('chambre_update', {'chambreId' : chambre.id}) }}" class="w3-button w3-blue-gray" type="button">MODIFIER</a>
+						<a href="{{ path('chambre_update', {'chambreId' : chambre.id}) }}" class="w3-button w3-blue-gray" type="button">MODIFIER ANNONCE</a>
 					</th>
 					<th>
-						<a href="{{ path('chambre_display', {'chambreId' : chambre.id}) }}" class="w3-button w3-blue" type="button">AFFICHER</a>
-					</th>
+						<a href="{{ path('chambre_delete', {'chambreId' : chambre.id}) }} " class="w3-button w3-red" type="button">SUPPRIMER ANNONCE</a>
+					</th>	
 				</tr>
 			</table>
 			<div class="w3-row-padding w3-padding-32" style="margin:0 -16px">
 				<div class="w3-third w3-margin-bottom" style="width:65%">
-					<img src="{{ asset("assets/img/salon4.jpg")}} " class="w3-round w3-hover-opacity" style="width: 450px" alt="chambre">
+					<img src="{{ asset("assets/img/salon4.jpg")}} " class="w3-round w3-hover-opacity" style="width: 450px" alt="chambre"> 
+					{# <img src="{{ asset(chambre.thumbnail) }}" class="w3-round w3-hover-opacity" style="width: 300px;" alt="chambre"> #}
 				</div>
 				<div class="w3-third w3-margin-bottom" style="width:33%">
 					<div class="w3-container w3-white">

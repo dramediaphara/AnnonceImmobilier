@@ -22,27 +22,25 @@ class Chambre
     #[ORM\Column(type: 'float')]
     private $price;
 
-
-    public function __construct($name = '', $description = '', $price = '')
+    #[ORM\ManyToOne(targetEntity: 'App\Entity\Category', inversedBy: 'chambres')]
+    #[ORM\JoinColumn(nullable: true)]
+    private $category;
+  
+    public function getCategoryName(): string
     {
-        if(!$name){
-            $this->name = "Name" .uniqid();
-        }else{
-            
-            $this->name = $name;
-        }
-        // contenu
-        if(!$description){
-            $this->content = "Description";
-        }else{
-            $this->description = $description;
-        }
-        // Price
-        if(!$price){
-            $this->price = "price";
-        }else{
-            $this->price = $price;
-        }
+        //Cette méthode nous rend une chaine de caractère avec le nom de la Catégorie liée à notre objet chambre, ou "Aucune" si aucune catégorie n'est liée
+        if($this->category){ //Si la chambre est bien lié à une Catégorie
+            return $this->category->getName();
+        } else return 'Aucun';
+    }
+
+    
+    public function getThumbnail(): string
+    {
+        //Cette méthode rend l'adresse de la vignette associée à la Category de l'objet
+        if($this->category && ($this->category->getName() != 'Autre')){ //Si notre Product est lié à une Category
+            return 'assets/img/image_' . strtolower($this->category->getName()) . '.jpg';
+        } else return 'assets/img/image_villa.jpg'; //On retourne "aucun" si la Catégorie est inexistante ou "Autre"
     }
 
     public function clearFields(): void
@@ -90,6 +88,18 @@ class Chambre
     public function setPrice(float $price): self
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }

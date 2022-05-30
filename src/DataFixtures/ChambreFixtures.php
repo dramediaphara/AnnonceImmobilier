@@ -14,9 +14,9 @@ class ChambreFixtures extends Fixture
         //Informations sur nos chambres
         $chambreArray = [
             [
-            "name" => "Chambre vide",
-            "description" => "Ceci est une location vide, aenean gravida ante a placerat rhoncus. Mauris odio magna, aliquet id massa ut, convallis porttitor enim. Aenean sit amet leo eu nibh dictum  suscipit erat. ",
-            "price" => 20,
+                "name" => "Chambre vide",
+                "description" => "Ceci est une location vide, aenean gravida ante a placerat rhoncus. Mauris odio magna, aliquet id massa ut, convallis porttitor enim. Aenean sit amet leo eu nibh dictum  suscipit erat. ",
+                "price" => 20,
             ],
             ["name" => "Chambre meublée", "description" => "Ceci est une location meublée, aliquam rhoncus lacus eget mattis. Cras sed porttitor mauris. Curabitur sit amet laoreet nisi, molestie interdum mi.  justo, convallis nec lacus congue, pretium faucibus mauris", "price" => 35,],
 
@@ -34,18 +34,9 @@ class ChambreFixtures extends Fixture
 
         ];
 
-        //On utilise une boucle foreach pour parcourir chaque entrée de notre tableau d'informations sur nos chambres et on utilise chaque entrée pour préparer un nouvel objet chambre à persister
-        foreach ($chambreArray as $chambreData) {
-            $chambre = new Chambre(); //On crée un nouvel objet chambre avant de le renseigner
-            $chambre->setName($chambreData['name']);
-            $chambre->setDescription($chambreData['description']);
-            $chambre->setPrice($chambreData['price']);
 
-            $manager->persist($chambre);
-        }
-
-          //La liste de nos différentes catégories sous la forme d'un tableau associatif, contenant une indication du type de catégorie sous la clef et l'objet Category en valeur. Etant donné que nous allons instanciers les Category plus tard dans une boucle, la valeur actuelle de ces différentes clefs est null
-          $categoryArray = [
+        //La liste de nos différentes catégories sous la forme d'un tableau associatif, contenant une indication du type de catégorie sous la clef et l'objet Category en valeur. Etant donné que nous allons instanciers les Category plus tard dans une boucle, la valeur actuelle de ces différentes clefs est null
+        $categoryArray = [
             'location vide' => null,
             'location meublee' => null,
             'location de vacance' => null,
@@ -58,7 +49,7 @@ class ChambreFixtures extends Fixture
         $lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at sapien ut sem convallis euismod. Phasellus eu condimentum augue. Praesent feugiat sem dolor, quis pharetra risus ullamcorper sed. Vivamus  nulla. Nam eget nisi massa. ';
 
         //Renseignement et implémentation de la liste des Category
-        foreach($categoryArray as $key => &$value){ //Nous récupérons le tableau
+        foreach ($categoryArray as $key => &$value) { //Nous récupérons le tableau
             //Le & avant $value est un passage en référence, ce qui signifie que nous récupérons la variable en tant que telle plutôt que sa valeur, ce qui nous permet de modifier notre tableau $categoryArray plutôt qu'une copie de value, qui sera supprimée après la boucle
             $value = new Category; //A chaque valeur est attribuée un objet Category
             $value->setName(ucfirst($key)); //Le nom est la clef de l'index
@@ -68,26 +59,27 @@ class ChambreFixtures extends Fixture
 
 
         //On utilise une boucle foreach pour parcourir chaque entrée de notre tableau d'informations sur nos chambres et on utilise chaque entrée pour préparer un nouvel objet chambre à persister
-        foreach($chambreArray as $chambreData){
+        foreach ($chambreArray as $chambreData) {
             $chambre = new Chambre(); //On crée un nouvel objet chambre avant de le renseigner
             $chambre->setName($chambreData['name']);
             $chambre->setDescription($chambreData['description']);
             $chambre->setPrice($chambreData['price']);
-           
+            $chambre->setCategory($categoryArray['autre']);
+
             $manager->persist($chambre);
-           
         }
 
         //On crée une liste de catégories potentielles
         $categories = ['location vide', 'location meublee', 'location de vacance', 'location commercial', 'location de bureau', 'autre'];
-        for($i=0;$i<15;$i++){
+        for ($i = 0; $i < 15; $i++) {
             //On sélectionne un nom de catégorie au hasard qui servira à nommer la chambre et à déterminer la clef que nous sélectionnons dans $categoryArray
             $selectedCategory = $categories[rand(0, (count($categories) - 1))];
-            $chambre = new Chambre(); //On crée un nouveau Product
-            $chambre->setName(ucfirst($selectedCategory) . " #" . rand(1000,9999));
+            $chambre = new Chambre(); //On crée une nouvelle chambre
+            $chambre->setName(ucfirst($selectedCategory) . " #" . rand(1000, 9999));
             $chambre->setDescription($lorem);
-            $chambre->setPrice(rand(1,150) + 0.99);
-            
+            $chambre->setPrice(rand(1, 150) + 0.99);
+            $chambre->setCategory($categoryArray[$selectedCategory]); //Nous récupérons l'objet de categoryArray tenu par la clef dont le nom est fourni par la valeur 'category' de $chambreData
+
             $manager->persist($chambre); //demande de persistance
         }
 
