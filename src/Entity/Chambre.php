@@ -2,8 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\ChambreRepository;
+use App\Entity\Tag;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ChambreRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: ChambreRepository::class)]
 class Chambre
@@ -25,6 +28,15 @@ class Chambre
     #[ORM\ManyToOne(targetEntity: 'App\Entity\Category', inversedBy: 'chambres')]
     #[ORM\JoinColumn(nullable: true)]
     private $category;
+
+    #[ORM\ManyToMany(targetEntity:'App\Entity\Tag', inversedBy:'chambres')]
+    #[ORM\JoinColumn(nullable:true)]
+    private $tags;
+
+    public function __construct()
+    {
+        $this->tags = new ArrayCollection();
+    }
   
     public function getCategoryName(): string
     {
@@ -100,6 +112,30 @@ class Chambre
     public function setCategory(?Category $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Tag>
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): self
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags[] = $tag;
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): self
+    {
+        $this->tags->removeElement($tag);
 
         return $this;
     }

@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Tag;
 use App\Entity\Chambre;
 use App\Entity\Category;
 use Doctrine\Persistence\ObjectManager;
@@ -34,6 +35,16 @@ class ChambreFixtures extends Fixture
 
         ];
 
+        //Nous préparons une collection de Tags:
+        $tagNames = ["Chambre", "Studio", "Appartement", "Maison", "Villa", "Local Commercial", "Local bureau"];
+        $tags = []; //Tableau vide
+        foreach($tagNames as $tagName){
+            //On crée une boucle foreach qui va parcourir notre tableau de noms de Tag, et pour chaque élément, nous allons initialiser un Tag et le ranger dans le tableau $tags
+            $tag = new Tag;
+            $tag->setName($tagName);
+            array_push($tags, $tag);
+            $manager->persist($tag);
+        }
 
         //La liste de nos différentes catégories sous la forme d'un tableau associatif, contenant une indication du type de catégorie sous la clef et l'objet Category en valeur. Etant donné que nous allons instanciers les Category plus tard dans une boucle, la valeur actuelle de ces différentes clefs est null
         $categoryArray = [
@@ -44,7 +55,6 @@ class ChambreFixtures extends Fixture
             'location de bureau' => null,
             'autre' => null,
         ];
-
         //Description générique via faux texte
         $lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at sapien ut sem convallis euismod. Phasellus eu condimentum augue. Praesent feugiat sem dolor, quis pharetra risus ullamcorper sed. Vivamus  nulla. Nam eget nisi massa. ';
 
@@ -79,7 +89,11 @@ class ChambreFixtures extends Fixture
             $chambre->setDescription($lorem);
             $chambre->setPrice(rand(1, 150) + 0.99);
             $chambre->setCategory($categoryArray[$selectedCategory]); //Nous récupérons l'objet de categoryArray tenu par la clef dont le nom est fourni par la valeur 'category' de $chambreData
-
+            foreach($tags as $tag){
+                if(rand(1, 10) > 8){ //20% de chances que le if soit exécuté
+                    $chambre->addTag($tag); //On lie le Produit au Tag actuellement parcouru
+                } 
+            }
             $manager->persist($chambre); //demande de persistance
         }
 

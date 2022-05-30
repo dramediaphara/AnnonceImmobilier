@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Tag;
 use App\Entity\Chambre;
 use App\Entity\Category;
 use Symfony\Component\Form\AbstractType;
@@ -51,6 +52,16 @@ class ChambreType extends AbstractType
                 ]
 
             ])
+            ->add('tags', EntityType::class, [
+                'label' => 'Tags',
+                'class' => Tag::class,      //Classe Entity utilisé pour notre champ
+                'choice_label' => 'name',   //Attribut utilisé pour représenter l'Entity
+                'expanded' => true,         //Affichage cases
+                'multiple' => true,         //Nous pouvons sélectionner PLUSIEURS Tags
+                'attr' => [
+                    'class' => 'w3-input w3-border w3-round w3-light-grey',
+                ],
+            ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Valider',
                 'attr' => [
@@ -68,3 +79,5 @@ class ChambreType extends AbstractType
         ]);
     }
 }
+
+// D14N7N6L20S14@drame

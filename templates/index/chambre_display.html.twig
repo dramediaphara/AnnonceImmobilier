@@ -31,6 +31,18 @@
 				<div class="w3-third w3-margin-bottom" style="width:65%">
 					<img src="{{ asset("assets/img/salon4.jpg")}} " class="w3-round w3-hover-opacity" style="width: 450px" alt="chambre"> 
 					{# <img src="{{ asset(chambre.thumbnail) }}" class="w3-round w3-hover-opacity" style="width: 300px;" alt="chambre"> #}
+					<div class="w3-container w3-white">
+                        <p><b>{{ chambre.name }}</b></p>
+                        <p><b>Tags:</b>
+                    {% if chambre.tags is not empty %}
+                    {% for tag in chambre.tags %}
+                  <a href="{{ path('index_tag', {'tagName' : tag.name}) }}">{{ tag.name }}</a>; 
+                {% endfor %}
+              {% else %}
+                <i>Autre.</i>
+              {% endif %}
+            </p>
+          </div>
 				</div>
 				<div class="w3-third w3-margin-bottom" style="width:33%">
 					<div class="w3-container w3-white">

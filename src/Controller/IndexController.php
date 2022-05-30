@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Tag;
 use App\Entity\Chambre;
 use App\Entity\Category;
 use App\Form\ChambreType;
@@ -56,6 +57,31 @@ class IndexController extends AbstractController
             'selectedCategory' => $category,
             'categories' => $categories,
             'chambres' => $chambres,
+        ]);
+    }
+
+    #[Route('/tag/{tagName}', name: 'index_tag')]
+    public function indexTag(string $tagName, ManagerRegistry $doctrine): Response
+    {
+        //Cette méthode renvoie la liste de tous les chambres liés au Tag dont le nom est affiché au sein de notre URL
+
+        //Afin de pouvoir communiquer avec notre base de données et récupérer les chambres lié à notre Tag, nous avons besoin de l'Entity Manager ainsi que du Repository de Tag
+        $entityManager = $doctrine->getManager();
+        $tagRepository = $entityManager->getRepository(Tag::class);
+        //Nous récupérons nos catégories
+        $categoryRepository = $entityManager->getRepository(Category::class);
+        $categories = $categoryRepository->findAll();
+        //Nous recherchons le Tag dont le nom a été renseigné dans notre URL, s'il n'est pas trouvé, nous retournons à l'index
+        $tag = $tagRepository->findOneBy(['name' => $tagName]);
+        if(!$tag){
+            return $this->redirectToRoute('app_index');
+        }
+        //On récupère les chambres de notre tag
+        $chambres = $tag->getChambres();
+        //Nous transmettons la liste des chambres et des Categories à notre index.html.twig
+        return $this->render('index/index.html.twig', [
+            'categories' => $categories,
+            'chambres' => $chambres
         ]);
     }
 
