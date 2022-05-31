@@ -80,7 +80,7 @@ class ChambreFixtures extends Fixture
         }
 
         //On crée une liste de catégories potentielles
-        $categories = ['location vide', 'location meublee', 'location de vacance', 'location commercial', 'location de bureau', 'autre'];
+        $categories = ['location vide', 'location meublée', 'location de vacance', 'location commercial', 'location de bureau', 'autre'];
         for ($i = 0; $i < 15; $i++) {
             //On sélectionne un nom de catégorie au hasard qui servira à nommer la chambre et à déterminer la clef que nous sélectionnons dans $categoryArray
             $selectedCategory = $categories[rand(0, (count($categories) - 1))];

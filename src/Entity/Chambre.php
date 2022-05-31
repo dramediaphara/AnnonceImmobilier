@@ -33,9 +33,14 @@ class Chambre
     #[ORM\JoinColumn(nullable:true)]
     private $tags;
 
+    #[ORM\OneToMany(targetEntity: 'App\Entity\Reservation', mappedBy: 'chambres')]
+    #[ORM\JoinColumn(nullable: true)]
+    private $reservations;
+
     public function __construct()
     {
         $this->tags = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
     }
   
     public function getCategoryName(): string
@@ -136,6 +141,36 @@ class Chambre
     public function removeTag(Tag $tag): self
     {
         $this->tags->removeElement($tag);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reservation>
+     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservation $reservation): self
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations[] = $reservation;
+            $reservation->setChambres($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): self
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getChambres() === $this) {
+                $reservation->setChambres(null);
+            }
+        }
 
         return $this;
     }
